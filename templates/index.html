@@ -1,0 +1,38 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+        background-color: rgb(20, 40, 60);
+        color: rgb(240, 248, 255);
+        font-family: "Helvetica", "Arial", sans-serif;
+        font-size: 1.3em;
+    }
+
+    a {
+        color: rgb(255, 111, 111);
+    }
+</style>
+  <head>
+    <title>Playlist Generator</title>
+  </head>
+  <body>
+    <h1>Enter Spotify Credentials</h1>
+    	<form action="/predict" method="POST">
+		<label for="clieid">Client ID:</label>
+		<input type="text" id="var1" name="var1"><br>
+
+		<label for="clisec">Client Secret:</label>
+		<input type="text" id="var2" name="var2"><br>
+
+		<label for="usrnme">Username:</label>
+		<input type="text" id="var3" name="var3"><br>
+
+		<label for="reduri">Redirect URI:</label>
+		<input type="text" id="var4" name="var4"><br>
+
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>

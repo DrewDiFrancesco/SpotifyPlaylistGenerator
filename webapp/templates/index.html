@@ -1,0 +1,30 @@
+<html>
+<head>
+<link rel="stylesheet" href='/static/style.css' />
+	<title>Playlist Generator</title>
+  <body>
+    <h1 class ="center">Enter Spotify Credentials</h1>
+    	<form action="/generate" class="center">
+		<label for='clieid'>Client ID:</label>
+		<input type='text' name='clieid'><br><br>
+
+		<label for='clisec'>Client Secret:</label>
+		<input type="text" name="clisec"><br><br>
+
+		<label for='usrnme'>Username:</label>
+		<input type='text' name='usrnme'><br><br>
+
+		<label for='reduri'>Redirect URI:</label>
+		<input type='text' name='reduri'><br><br>
+
+		<input type='submit' value='Continue'>
+	</form>
+<style>
+.center {
+  padding: 100px 0;
+  text-align: center;
+}
+</style>
+</head>
+
+</html>
