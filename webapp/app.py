@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, json
 import joblib
 import pandas as pd
 import spotipy
@@ -7,6 +7,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+from helperFunc import *
 
 app = Flask(__name__)
 
@@ -27,10 +28,10 @@ def generate():
     sp = spotipy.Spotify(auth=token)
     FEATURE_KEYS = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo','duration_ms','time_signature']
 
-    saved_tracks    = get_saved_tracks()
+    saved_tracks = get_saved_tracks()
     saved_tracks_df = pd.DataFrame(saved_tracks)
 
-    saved_tracks_audiofeat    = get_audio_features(track_ids = list(saved_tracks_df['track_id']))
+    saved_tracks_audiofeat  = get_audio_features(track_ids = list(saved_tracks_df['track_id']))
     saved_tracks_audiofeat_df = pd.DataFrame(saved_tracks_audiofeat).drop(['analysis_url', 'track_href', \
                                                                        'type', 'uri'], axis = 1)
 
@@ -45,15 +46,11 @@ def generate():
     loaded_model = joblib.load('model.sav')
     norm_d['cluster'] = loaded_model.predict(norm_d[FEATURE_KEYS]) + 1
     
-    test = norm_d[norm_d['cluster']==12]
+    songs = norm_d[['name','artists','cluster']]
+    
 
-    return GENERATE_HTML.format(test)
+    return render_template('generate.html', songs=songs)
 
-GENERATE_HTML = """
-	<html><body>
-		<h2>Hello, {0}!</h2>
-	</body></html>
-	"""
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

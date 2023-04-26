@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./style.css">
+    
+    <script src="./main.js"></script>
+    
+    <!-- <link rel="stylesheet" href="./css-1.css"> -->
+    <title>Generated Playlists</title>
+</head>
+
+<body>
+	<div class="heading">
+	<h1>Playlists</h1>
+</div>
+	<div class="outer-wrapper">
+	<div class ="table-wrapper">
+
+	<table id="emp-table">
+		<thead>
+			<tr>
+      				<th>Song Name</th>
+      				<th col-index = 1>Artist
+					<select class="table-filter" onchange="filter_rows()">
+						<option value="all"></option>
+	  				</select>
+				</th>
+      				<th col-index = 2>Playlist
+	  				<select class="table-filter" onchange="filter_rows()">
+						<option value="all"></option>
+	  				</select>
+      				</th>
+    			</tr>
+  		</thead>
+  		<tbody>
+    		{% for index, row in songs.iterrows() %}
+    		<tr>
+      			<td>{{ row['name']|safe }}</td>
+      			<td>{{ row['artists']|safe }}</td>
+      			<td>{{ row['cluster'] }}</td>
+    		</tr>
+    		{% endfor %}
+  		</tbody>
+	</table>
+	
+	<script>
+        	window.onload = () => {
+            	console.log(document.querySelector("#emp-table > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
+        	};
+
+        	getUniqueValuesFromColumn()
+        
+    	</script>
+</div>
+</div>
+</body>
+
+</html>

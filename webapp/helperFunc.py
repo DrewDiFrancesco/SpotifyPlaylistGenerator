@@ -6,8 +6,18 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+from flask import request
 
 def get_saved_tracks(limit = 50, offset = 0):
+    client_id = request.args.get('clieid', '')
+    client_secret = request.args.get('clisec', '')
+    username = request.args.get('usrnme', '')
+    redirect_uri = request.args.get('reduri', '')
+
+    client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
+    scope = 'user-library-read'
+    token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    sp = spotipy.Spotify(auth=token)
     saved_tracks = [ ]
     
     # get initial list of tracks to determine length
@@ -31,7 +41,16 @@ def get_saved_tracks(limit = 50, offset = 0):
     return saved_tracks
 
 def get_audio_features(track_ids):
+    client_id = request.args.get('clieid', '')
+    client_secret = request.args.get('clisec', '')
+    username = request.args.get('usrnme', '')
+    redirect_uri = request.args.get('reduri', '')
+
     saved_tracks_audiofeat = [ ]
+    client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
+    scope = 'user-library-read'
+    token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    sp = spotipy.Spotify(auth=token)
     
     # iterate through track_ids in groups of 50
     for ix in range(0,len(track_ids),50):
@@ -41,6 +60,16 @@ def get_audio_features(track_ids):
     return saved_tracks_audiofeat
 
 def save_cluster_tracks_to_playlist(playlist_name, track_ids):
+    client_id = request.args.get('clieid', '')
+    client_secret = request.args.get('clisec', '')
+    username = request.args.get('usrnme', '')
+    redirect_uri = request.args.get('reduri', '')
+
+    client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
+    scope = 'user-library-read'
+    token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    sp = spotipy.Spotify(auth=token)
+
     # get all of the users playlists
     all_playlists = get_all_user_playlists()
     
@@ -62,6 +91,15 @@ def save_cluster_tracks_to_playlist(playlist_name, track_ids):
     sp.user_playlist_add_tracks(user_id, playlist_id = playlist['id'], tracks = track_ids)
     
 def get_all_user_playlists(playlist_limit = 50, playlist_offset = 0):
+    client_id = request.args.get('clieid', '')
+    client_secret = request.args.get('clisec', '')
+    username = request.args.get('usrnme', '')
+    redirect_uri = request.args.get('reduri', '')
+
+    client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
+    scope = 'user-library-read'
+    token = util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    sp = spotipy.Spotify(auth=token)
     # get initial list of users playlists (first n = playlist_limit), determine total number of playlists
     playlists_obj = sp.user_playlists(user_id, limit = playlist_limit, offset = playlist_offset)
     num_playlists = playlists_obj['total']
