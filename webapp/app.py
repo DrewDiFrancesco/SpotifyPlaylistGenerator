@@ -47,6 +47,7 @@ def generate():
     norm_d['cluster'] = loaded_model.predict(norm_d[FEATURE_KEYS]) + 1
     
     songs = norm_d[['name','artists','cluster']]
+    songs = songs.sort_values('cluster', ascending=True)
     
 
     return render_template('generate.html', songs=songs)

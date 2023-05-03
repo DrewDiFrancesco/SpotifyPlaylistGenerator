@@ -1,63 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<label for="cluster-filter">Select Playlist:</label>
+<select id="cluster-filter">
+</select>
 
-    <link rel="stylesheet" href="./style.css">
-    
-    <script src="./main.js"></script>
-    
-    <!-- <link rel="stylesheet" href="./css-1.css"> -->
-    <title>Generated Playlists</title>
-</head>
+<table>
+    <thead>
+        <tr>
+            <th>Song</th>
+            <th>Artist</th>
+            <th>Playlist</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for song in songs.iterrows() %}
+            <tr class="cluster-{{ song[1]['cluster'] }}">
+                <td>{{ song[1]['name'] }}</td>
+                <td>{{ song[1]['artists'] }}</td>
+                <td>{{ song[1]['cluster'] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-<body>
-	<div class="heading">
-	<h1>Playlists</h1>
-</div>
-	<div class="outer-wrapper">
-	<div class ="table-wrapper">
+<script>
+const clusterFilter = document.getElementById('cluster-filter');
+const rows = document.querySelectorAll('table tbody tr');
+const clusters = Array.from(new Set(Array.from(rows, row => row.querySelector('td:last-child').textContent)));
 
-	<table id="emp-table">
-		<thead>
-			<tr>
-      				<th>Song Name</th>
-      				<th col-index = 1>Artist
-					<select class="table-filter" onchange="filter_rows()">
-						<option value="all"></option>
-	  				</select>
-				</th>
-      				<th col-index = 2>Playlist
-	  				<select class="table-filter" onchange="filter_rows()">
-						<option value="all"></option>
-	  				</select>
-      				</th>
-    			</tr>
-  		</thead>
-  		<tbody>
-    		{% for index, row in songs.iterrows() %}
-    		<tr>
-      			<td>{{ row['name']|safe }}</td>
-      			<td>{{ row['artists']|safe }}</td>
-      			<td>{{ row['cluster'] }}</td>
-    		</tr>
-    		{% endfor %}
-  		</tbody>
-	</table>
-	
-	<script>
-        	window.onload = () => {
-            	console.log(document.querySelector("#emp-table > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
-        	};
+clusters.forEach(cluster => {
+    const option = document.createElement('option');
+    option.value = cluster;
+    option.textContent = `Cluster ${cluster}`;
+    clusterFilter.appendChild(option);
+});
 
-        	getUniqueValuesFromColumn()
-        
-    	</script>
-</div>
-</div>
-</body>
-
+clusterFilter.addEventListener('change', () => {
+    const selectedCluster = clusterFilter.value;
+    rows.forEach(row => {
+        if (selectedCluster === 'all' || row.querySelector('td:last-child').textContent === selectedCluster) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+</script>
 </html>
